@@ -1,0 +1,30 @@
+dservices:
+  app:
+    container_name: hyperf-weather-mcp
+    image: hyperf-weather-mcp:local
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/opt/www:ro
+      - vendor:/opt/www/vendor
+      - runtime:/opt/www/runtime
+    ports:
+      - "127.0.0.1:9601:9601"
+    environment:
+      APP_ENV: dev
+      SCAN_CACHEABLE: "false"
+      WORKER_NUM: "1"
+      WEATHER_BASE_URL: https://wttr.in
+      WEATHER_CONNECT_TIMEOUT: "10"
+      WEATHER_TIMEOUT: "30"
+    restart: unless-stopped
+
+volumes:
+  vendor:
+  runtime:
+
+networks:
+  default:
+    name: hyperf-weather-mcp
